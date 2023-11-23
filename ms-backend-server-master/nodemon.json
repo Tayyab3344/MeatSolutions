@@ -1,0 +1,10 @@
+{
+  "env": {
+    "MONGO_USER": "rizwan",
+    "MONGO_PASSWORD": "rizwan123",
+    "MONGO_DATABASE": "foodApp",
+    "SENDGRID_KEY": "SKb79ce9e39f15eabfdb08432927b106c1",
+    "my_email":"xshown123@gmail.com",
+    "my_password":"urcb lnib pbbo hlud"
+  }
+}
