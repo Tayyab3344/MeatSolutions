@@ -49,24 +49,27 @@ export default function AddRestaurant() {
   if (message) {
     if (message.includes("Upload an image")) imageError = message;
   }
+  const [passwordMatchError, setPasswordMatchError] = useState("");
+  const [passwordLengthError, setPasswordLengthError] = useState("");
+  const [minOrderError, setMinOrderError] = useState("");
 
   const handleFileSelect = (event) => {
     setImages(event.target.files);
   };
 
   //error variables
-  let emailError = null;
-  let passwordError = null;
+  // let emailError = null;
+  // let passwordError = null;
   let confirmPasswordError = null;
   let streetError = null;
   let aptError = null;
   let localityError = null;
   let zipError = null;
   let phoneNoError = null;
-  let nameError = null;
+  // let nameError = null;
   let tagsError = null;
   let costForOneError = null;
-  let minOrderError = null;
+  // let minOrderError = null;
   let paymentError = null;
 
   // if (errors) {
@@ -111,7 +114,28 @@ export default function AddRestaurant() {
     formData.append("payment", inputs.payment);
     formData.append("role", "ROLE_SELLER");
     dispatch(signupSeller(formData, history));
+    if (inputs.password.length < 6) {
+      setPasswordLengthError("Password must be at least 6 characters long");
+    } else {
+      setPasswordLengthError("");
+    }
+
+    // Password matching validation
+    if (inputs.password !== inputs.confirmPassword) {
+      setPasswordMatchError("Passwords do not match");
+    } else {
+      setPasswordMatchError("");
+    }
+
+    // If password and confirm password are valid, proceed with form submission
+    if (!passwordLengthError && !passwordMatchError) {
+      // ... (existing code)
+      dispatch(signupSeller(formData, history));
+    }
   };
+  const [emailError, setEmailError] = useState("");
+  const [nameError, setnameError] = useState("");
+  const [passwordError, setpasswordError] = useState("");
 
   const { inputs, handleInputChange, handleSubmit } = useForm(
     {
@@ -132,6 +156,35 @@ export default function AddRestaurant() {
     signupSellerHandle
   );
 
+  //Email validation
+  const validateEmail = (email) => {
+    // Regular expression for basic email validation
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+    if (!email || emailRegex.test(email)) {
+      setEmailError("");
+    } else {
+      setEmailError("Invalid email format");
+    }
+  };
+
+  //Username validation
+  const validatename = (name) => {
+    // Regular expression for basic email validation
+    const nameRegex = /^[A-Za-z]+$/;
+
+    if (!name || nameRegex.test(name)) {
+      setnameError("");
+    } else {
+      setnameError("Only Alphabetic");
+    }
+  };
+  const handleEmailBlur = () => {
+    validateEmail(inputs.email);
+  };
+  const handleNameBlur = () => {
+    validatename(inputs.name);
+  };
   return (
     <div className={classes.root}>
       <Grid container>
@@ -143,15 +196,13 @@ export default function AddRestaurant() {
                 <Typography
                   variant="h4"
                   className={classes.title}
-                  style={{ textAlign: "center" }}
-                >
-                  Add a Restaurant
+                  style={{ textAlign: "center" }}>
+                  Add a Shop
                 </Typography>
                 <Typography
                   variant="body1"
                   component="p"
-                  style={{ margin: "10px 10px 2px 10px" }}
-                >
+                  style={{ margin: "10px 10px 2px 10px" }}>
                   Basic Info - Get Started
                 </Typography>
                 <form noValidate onSubmit={handleSubmit}>
@@ -162,6 +213,7 @@ export default function AddRestaurant() {
                     className={classes.textField}
                     placeholder="Your restaurant name"
                     onChange={handleInputChange}
+                    onBlur={handleNameBlur}
                     value={inputs.name}
                     helperText={nameError}
                     error={nameError ? true : false}
@@ -175,6 +227,7 @@ export default function AddRestaurant() {
                     placeholder="Your business Email"
                     className={classes.textField}
                     onChange={handleInputChange}
+                    onBlur={handleEmailBlur}
                     value={inputs.email}
                     helperText={emailError}
                     error={emailError ? true : false}
@@ -205,6 +258,7 @@ export default function AddRestaurant() {
                     helperText={costForOneError}
                     error={costForOneError ? true : false}
                     type="number"
+                    inputProps={{ min: 0 }}
                     fullWidth
                     required
                   />
@@ -213,20 +267,19 @@ export default function AddRestaurant() {
                     name="minOrderAmount"
                     label="Min Order Amount"
                     placeholder="Minimum amount to place order"
-                    className={classes.textField}
                     onChange={handleInputChange}
                     value={inputs.minOrderAmount}
                     helperText={minOrderError}
-                    error={minOrderError ? true : false}
+                    error={!!minOrderError}
                     type="number"
+                    inputProps={{ min: 0, step: 0.01, pattern: "[0-9]*[.]" }}
                     fullWidth
                     required
                   />
                   <Typography
                     variant="body2"
                     component="p"
-                    style={{ margin: "10px 10px 2px 10px" }}
-                  >
+                    style={{ margin: "10px 10px 2px 10px" }}>
                     Address:
                   </Typography>
                   <div className={classes.address}>
@@ -309,8 +362,7 @@ export default function AddRestaurant() {
                   <Typography
                     variant="body2"
                     component="p"
-                    style={{ margin: "10px 10px 2px 10px" }}
-                  >
+                    style={{ margin: "10px 10px 2px 10px" }}>
                     Upload Images:
                   </Typography>
                   <input
@@ -326,8 +378,7 @@ export default function AddRestaurant() {
                     <Typography
                       variant="body2"
                       component="p"
-                      style={{ margin: "4px 10px 2px 10px", color: "#f44336" }}
-                    >
+                      style={{ margin: "4px 10px 2px 10px", color: "#f44336" }}>
                       Upload an Image as well
                     </Typography>
                   )}
@@ -339,8 +390,10 @@ export default function AddRestaurant() {
                     className={classes.textField}
                     onChange={handleInputChange}
                     value={inputs.password}
-                    helperText={passwordError}
-                    error={passwordError ? true : false}
+                    helperText={
+                      passwordError ? passwordError : passwordLengthError
+                    }
+                    error={passwordError ? passwordError : passwordLengthError}
                     fullWidth
                     required
                   />
@@ -361,6 +414,14 @@ export default function AddRestaurant() {
                     fullWidth
                     required
                   />
+                  {passwordMatchError && (
+                    <Typography
+                      variant="body2"
+                      component="p"
+                      style={{ margin: "4px 10px 2px 10px", color: "#f44336" }}>
+                      {passwordMatchError}
+                    </Typography>
+                  )}
 
                   {serverError && (
                     <Typography variant="body2" className={classes.customError}>
@@ -374,8 +435,7 @@ export default function AddRestaurant() {
                     color="primary"
                     className={classes.button}
                     fullWidth
-                    disabled={loading}
-                  >
+                    disabled={loading}>
                     Submit
                     {loading && (
                       <CircularProgress
@@ -387,8 +447,7 @@ export default function AddRestaurant() {
                   <br />
                   <small
                     className={classes.small}
-                    style={{ marginLeft: "260px" }}
-                  >
+                    style={{ marginLeft: "260px" }}>
                     Partner with Meat Solution and scale your business
                   </small>
                 </form>
@@ -400,14 +459,12 @@ export default function AddRestaurant() {
           <Paper
             className={classes.paper}
             style={{ backgroundColor: "#e3e3e8" }}
-            elevation={2}
-          >
+            elevation={2}>
             <Typography
               gutterBottom
               variant="h5"
               noWrap
-              style={{ textAlign: "center" }}
-            >
+              style={{ textAlign: "center" }}>
               Get Started in just 3 steps
               <br />
               <br />
@@ -415,12 +472,10 @@ export default function AddRestaurant() {
             <Typography
               variant="body2"
               color="textPrimary"
-              style={{ marginLeft: "30px", fontSize: "16px" }}
-            >
-              1. Tell us about your restaurant. <br />
+              style={{ marginLeft: "30px", fontSize: "16px" }}>
+              1. Tell us about your Shop. <br />
               2. Verify your Email. <br />
-              3. Access Restaurant Dashboard and go
-              &nbsp;&nbsp;&nbsp;&nbsp;live.
+              3. Access shop Dashboard.
               <br />
               <br />
               <br />

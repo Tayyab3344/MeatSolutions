@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-//material-ui
+// material-ui
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -11,9 +11,6 @@ import HomeStart from "../components/HomeStart";
 import SearchBar from "../components/SearchBar";
 import Spinner from "../util/spinner/spinner";
 import RestaurantContent from "../components/RestaurantContent";
-
-// import store from "../redux/store";
-// import { fetchRestaurantsByAddress } from "../redux/actions/dataActions";
 
 const useStyles = makeStyles(() => ({
   center: {
@@ -27,20 +24,11 @@ const useStyles = makeStyles(() => ({
 const Home = () => {
   const classes = useStyles();
   const { loading } = useSelector((state) => state.data);
-  const {
-    account: { role },
-    authenticated,
-  } = useSelector((state) => state.auth);
+  const { authenticated, account } = useSelector((state) => state.auth);
+  const role = account ? account.role : null;
   const [locationStatus, setLocationStatus] = useState(
     localStorage.getItem("location") ? true : false
   );
-
-  // let latlng = localStorage.getItem("latlng");
-
-  // if (latlng) {
-  //   const latlngArray = latlng.split(", ");
-  //   dispatch(fetchRestaurantsByAddress(latlngArray[0], latlngArray[1]));
-  // }
 
   let restaurantMarkup = loading ? <Spinner /> : <RestaurantContent />;
   return (
@@ -49,11 +37,11 @@ const Home = () => {
         <Redirect to="/seller/dashboard" />
       ) : (
         <>
-            <HomeStart />
-            <Grid container direction="column">
+          <HomeStart />
+          <Grid container direction="column">
             <Grid item>
               <Typography variant="h5" className={classes.center} noWrap>
-                Your favourite food, delivered with Meat Solutions&nbsp;&nbsp;
+                Your favorite food, delivered with Meat Solutions&nbsp;&nbsp;
                 <span style={{ fontSize: 40 }}>🍽</span>
               </Typography>
             </Grid>
