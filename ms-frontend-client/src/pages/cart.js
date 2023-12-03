@@ -301,7 +301,15 @@ const Cart = (props) => {
                       <span>Rs. {price + deliveryCharge}</span>
                     </div>
                     <br />
-                    
+                    <div>
+                      <Button
+                        fullWidth
+                        className={classes.checkoutButton}
+                        disabled={price === 0}
+                        onClick={handleinspection}>
+                        Book Inspection Officer
+                      </Button>
+                    </div>
                   </Typography>
                   {step === 1 && (
                     <div>
