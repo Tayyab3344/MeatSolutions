@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
     color: "black",
     margin: "0 6px 0",
     display: "inline-block",
-    hover "grey",
+    hover: "grey",
   },
   buttons: {
     marginRight: 60,
@@ -36,12 +36,13 @@ export default function AppBarPrimary() {
   const history = useHistory();
 
   const auth = useSelector((state) => state.auth);
-  const userRole = auth.account.role;
 
   if (!auth) {
     // Handle cases where auth is not available in the Redux state
     return null;
   }
+
+  const userRole = auth.account ? auth.account.role : null;
 
   const {
     authenticated,
@@ -60,7 +61,9 @@ export default function AppBarPrimary() {
       <Toolbar>
         <Link to="/" className={classes.title}>
           <Typography variant="h6" noWrap>
-            <img src="https://i.postimg.cc/90qmHDYD/Untitled-2.png" width="50px"></img>
+            <img
+              src="https://i.postimg.cc/90qmHDYD/Untitled-2.png"
+              width="50px"></img>
             <span className={classes.name}> Meat Solutions</span>
           </Typography>
         </Link>
@@ -76,8 +79,7 @@ export default function AppBarPrimary() {
               <Button
                 onClick={handleLogout}
                 className={classes.buttonStyles}
-                variant="outlined"
-              >
+                variant="outlined">
                 Logout
               </Button>
             </div>
@@ -95,8 +97,7 @@ export default function AppBarPrimary() {
               <Button
                 onClick={handleLogout}
                 className={classes.buttonStyles}
-                variant="outlined"
-              >
+                variant="outlined">
                 Logout
               </Button>
             </div>
