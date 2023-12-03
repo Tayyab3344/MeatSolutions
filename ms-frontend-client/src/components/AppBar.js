@@ -19,6 +19,7 @@ const useStyles = makeStyles(() => ({
     color: "black",
     margin: "0 6px 0",
     display: "inline-block",
+    hover "grey",
   },
   buttons: {
     marginRight: 60,
