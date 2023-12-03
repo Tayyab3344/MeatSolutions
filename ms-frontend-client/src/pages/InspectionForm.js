@@ -96,43 +96,7 @@ const MyForm = () => {
           />
         </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Available Time:</label>
-          <select
-            name="availableTime"
-            value={formData.availableTime}
-            onChange={handleChange}
-            style={inputStyle}
-            required>
-            <option value="">Select time</option>
-            <option value="morning">Morning</option>
-            <option value="afternoon">Afternoon</option>
-            <option value="evening">Evening</option>
-          </select>
-        </div>
-
-        <div style={{ marginBottom: "15px" }}>
-          <label>Date:</label>
-          <input
-            type="date"
-            name="selectedDate"
-            value={formData.selectedDate}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-        </div>
-
-        <div style={{ marginBottom: "15px" }}>
-          <label>Description:</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-        </div>
+        
 
         <button type="submit" style={buttonStyle}>
           Submit
