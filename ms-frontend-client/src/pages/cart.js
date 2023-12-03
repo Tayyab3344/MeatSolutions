@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart, fetchAddress } from "../redux/actions/dataActions";
 import Spinner from "../util/spinner/spinner";
@@ -12,6 +13,9 @@ import TextField from "@material-ui/core/TextField";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import MyButton from "../util/MyButton";
 import CartItem from "../components/CartItem";
+import payment from "./payment.css";
+// import PaymentPage from "./payment/PaymentPage";
+import StripeCheckout from "react-stripe-checkout";
 
 // custom-hook
 import useForm from "../hooks/forms";
@@ -51,7 +55,7 @@ const Cart = (props) => {
 
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { loading, cart, price } = useSelector((state) => state.data) || {}; // Ensure cart and price are initialized as empty objects
+  const { loading, cart, price } = useSelector((state) => state.data) || {};
   const { errors } = useSelector((state) => state.UI);
   const history = useHistory();
 
@@ -79,16 +83,11 @@ const Cart = (props) => {
   };
 
   const { inputs, handleInputChange } = useForm({
-    street:
-      props.location.state?.address?.street || "",
-    locality:
-      props.location.state?.address?.locality || "",
-    aptName:
-      props.location.state?.address?.aptName || "",
-    zip:
-      props.location.state?.address?.zip || "",
-    phoneNo:
-      props.location.state?.address?.phoneNo || "",
+    street: props.location.state?.address?.street || "",
+    locality: props.location.state?.address?.locality || "",
+    aptName: props.location.state?.address?.aptName || "",
+    zip: props.location.state?.address?.zip || "",
+    phoneNo: props.location.state?.address?.phoneNo || "",
   });
 
   useEffect(() => {
@@ -98,6 +97,43 @@ const Cart = (props) => {
 
   const nextStep = () => {
     setStep(step + 1);
+  };
+
+  const handleinspection = () => {
+    history.push("/inspection");
+  };
+
+  const orders = [
+    {
+      productName: "Tayyab",
+      email: "f190911@null.edu.pk",
+      creatorPrice: price,
+    },
+  ];
+
+  const handleToken = async (token) => {
+    try {
+      // console.log(`Order details: ${JSON.stringify(orders)}`);
+      const response = await fetch(`http://localhost:3002/api/payment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: token.id,
+          amount: price * 100 + 20, // convert to cents
+          orders: JSON.stringify(orders),
+        }),
+      });
+      const data = await response.json();
+      //   if (response.ok) {
+      //     navigate("/");
+      //   }
+      alert(data.message);
+    } catch (err) {
+      console.log(err);
+      alert("Payment failed");
+    }
   };
 
   const prevStep = () => {
@@ -142,8 +178,7 @@ const Cart = (props) => {
                   <Typography
                     variant="body2"
                     component="p"
-                    style={{ margin: "10px 10px 2px 10px" }}
-                  >
+                    style={{ margin: "10px 10px 2px 10px" }}>
                     Address:
                   </Typography>
                   <div className={classes.address}>
@@ -217,8 +252,7 @@ const Cart = (props) => {
               <Paper
                 className={classes.paper}
                 style={{ backgroundColor: "#faf7f7" }}
-                elevation={4}
-              >
+                elevation={4}>
                 <div style={{ marginLeft: 20, marginRight: 20 }}>
                   <br />
                   <Typography gutterBottom variant="h5" noWrap>
@@ -248,8 +282,7 @@ const Cart = (props) => {
                         <Typography
                           variant="body2"
                           color="textPrimary"
-                          key={item.itemId._id}
-                        >
+                          key={item.itemId._id}>
                           <div className={classes.spaceTypo}>
                             <span>{item.itemId.title}</span>
                             <span>
@@ -268,31 +301,65 @@ const Cart = (props) => {
                       <span>Rs. {price + deliveryCharge}</span>
                     </div>
                     <br />
+                    
                   </Typography>
                   {step === 1 && (
-                    <Button
-                      fullWidth
-                      className={classes.checkoutButton}
-                      disabled={price === 0}
-                      onClick={nextStep}
-                    >
-                      Proceed to Checkout
-                    </Button>
+                    <div>
+                      <div onClick={nextStep}>
+                        <StripeCheckout
+                          stripeKey="pk_test_51O1iJEIUiAXCZO9syMOo2UBGZeTw4shjatTYNOfjdROFlbIeCzpGqAyxtGFr4AwVDXKmd91BApSvReIEL4Kzsuci00PXJktkFQ"
+                          token={handleToken}
+                          amount={price * 100 + 20} // convert to PKR
+                          name={"Tayyab"} // Display the creator's name
+                          billingAddress
+                          shippingAddress
+                          label="Proceed to Checkout"
+                          className={classes.checkoutButton}
+                        />
+                        <br />
+                      </div>
+                      {/* <Button
+                        fullWidth
+                        className={classes.checkoutButton}
+                        disabled={price === 0}
+                        onClick={nextStep}>
+                        Proceed to Checkout
+                      </Button> */}
+                    </div>
                   )}
                   {step === 2 && (
                     <Button
                       fullWidth
                       className={classes.checkoutButton}
-                      onClick={handlePlaceOrder}
-                    >
+                      onClick={handlePlaceOrder}>
                       Place Order
                     </Button>
+                  )}
+                  {step === 3 && (
+                    <StripeCheckout
+                      stripeKey="pk_test_51O1iJEIUiAXCZO9syMOo2UBGZeTw4shjatTYNOfjdROFlbIeCzpGqAyxtGFr4AwVDXKmd91BApSvReIEL4Kzsuci00PXJktkFQ"
+                      token={handleToken}
+                      amount={price * 100 + 20} // convert to cents
+                      name={"Tayyab"} // Display the creator's name
+                      billingAddress
+                      shippingAddress
+                    />
                   )}
                 </div>
               </Paper>
             </Grid>
             <Grid item sm={1} />
           </Grid>
+          {/* <div style={{ alignItems: "centre" }}>
+            <StripeCheckout
+              stripeKey="pk_test_51O1iJEIUiAXCZO9syMOo2UBGZeTw4shjatTYNOfjdROFlbIeCzpGqAyxtGFr4AwVDXKmd91BApSvReIEL4Kzsuci00PXJktkFQ"
+              token={handleToken}
+              amount={price * 100 + 20} // convert to PKR
+              name={"Tayyab"} // Display the creator's name
+              billingAddress
+              shippingAddress
+            />
+          </div> */}
         </>
       )}
     </>
