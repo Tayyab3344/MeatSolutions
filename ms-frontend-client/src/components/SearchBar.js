@@ -150,7 +150,14 @@ export default function CustomizedInputBase(props) {
             loading,
           }) => (
             <>
-              
+              <InputBase
+                {...getInputProps({
+                  placeholder: "Enter delivery address",
+                })}
+                className={classes.input}
+                inputProps={{
+                  "aria-label": "search google maps for delivery address",
+                }}
               />
               <div className={classes.results}>
                 {loading ? <div>Getting Results...</div> : null}
