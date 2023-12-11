@@ -9,6 +9,8 @@ const authRoutes = require("./routes/auth");
 const itemRoutes = require("./routes/item");
 const userRoutes = require("./routes/user");
 
+const FormDataModel = require("./models/FormDataModel");
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -53,6 +55,72 @@ app.use("/auth", upload.array("images", 10), authRoutes);
 app.use("/seller", upload.single("image"), itemRoutes);
 app.use(userRoutes);
 
+//......................hire me payment method..........
+const stripe = require("stripe")(
+  "sk_test_51O1iJEIUiAXCZO9s86ttYxC0LEiIMpMMGJI03j89Jv8ql1CyhTJHiTHtzVo54s1z4rWCZjGsTOJ73e3ZkrmuNQSm00i4cyQBdK"
+);
+
+// Create Mongoose models
+const Order = mongoose.model("Hiring Payments", {
+  creatorName: String, // Creator name
+  email: String,
+  price: Number,
+});
+
+const handlePayment = async (req, res) => {
+  try {
+    const { id, amount, orders } = req.body;
+    console.log(req.body);
+
+    // Parse orders array from JSON string
+    const parsedOrders = JSON.parse(orders);
+
+    if (
+      !parsedOrders ||
+      !Array.isArray(parsedOrders) || // Check if it's an array
+      parsedOrders.length === 0 ||
+      parsedOrders.some(
+        (order) =>
+          !order.productName || // Change to productName
+          !order.email ||
+          !order.creatorPrice // Change to creatorPrice
+      )
+    ) {
+      return res.status(400).json({ message: "Missing or invalid orders" });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: "pkr",
+      description: "Orders Payment",
+      payment_method_types: ["card"],
+      payment_method_data: {
+        type: "card",
+        card: {
+          token: id,
+        },
+      },
+      confirm: true,
+    });
+
+    console.log(paymentIntent);
+
+    // Save order details to the database using the Order model
+    const orderDocs = await Order.create(parsedOrders);
+
+    // Remove ordered products from the database by creator name using the Product model
+    // const creatorNames = parsedOrders.map(order => order.productName);
+    // await Product.deleteMany({ name: { $in: creatorNames } });
+
+    res.json({ message: "Payment successful" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Payment failed" });
+  }
+};
+
+app.post("/api/payment", handlePayment);
+
 //error middleware
 app.use((error, req, res, next) => {
   console.log(error + "--------------------------");
@@ -73,7 +141,7 @@ const clients = {};
 
 mongoose
   .connect(
-    'mongodb+srv://rizwan:rizwan123@cluster0.3lrinwh.mongodb.net/meatsolution?retryWrites=true&w=majority'
+    "mongodb+srv://rizwan:rizwan123@cluster0.3lrinwh.mongodb.net/meatsol?retryWrites=true&w=majority"
   )
   .then((result) => {
     console.log("Connected to db");
@@ -98,5 +166,26 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
+
+app.post("/api/form-submit", async (req, res) => {
+  try {
+    const formData = req.body;
+
+    // Create a new instance of the FormDataModel
+    const formDataInstance = new FormDataModel(formData);
+
+    // Save the form data to MongoDB
+    await formDataInstance.save();
+
+    console.log("Form data inserted into MongoDB:", formData);
+
+    res
+      .status(200)
+      .json({ message: "Form data received and stored successfully" });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 exports.clients = clients;
