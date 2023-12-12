@@ -6,22 +6,7 @@ import { getOrders, socketStatusUpdate } from "../redux/actions/dataActions";
 import OrderCard from "../components/OrderCard";
 
 // material-ui
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.spreadThis,
-  para: {
-    fontSize: "x-large",
-    marginLeft: "32%",
-  },
-  title: {
-    margin: "10px 0px 10px 130px",
-    display: "inline-block",
-    marginRight: "40%",
-  },
-}));
 
 const Orders = (props) => {
   const dispatch = useDispatch();
