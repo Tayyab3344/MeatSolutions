@@ -5,8 +5,23 @@ import openSocket from "socket.io-client";
 import { getOrders, socketStatusUpdate } from "../redux/actions/dataActions";
 import OrderCard from "../components/OrderCard";
 
-// material-ui
+// Cart Material UI
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 
+const useStyles = makeStyles((theme) => ({
+  ...theme.spreadThis,
+  para: {
+    fontSize: "x-large",
+    marginLeft: "32%",
+  },
+  title: {
+    margin: "10px 0px 10px 130px",
+    display: "inline-block",
+    marginRight: "40%",
+  },
+}));
 
 const Orders = (props) => {
   const dispatch = useDispatch();
@@ -29,7 +44,9 @@ const Orders = (props) => {
         dispatch(getOrders());
       }
     });
-  }, [_id, dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-line react-hooks/exhaustive-deps
+  }, [_id, dispatch]); 
+  
 
   return (
     <>
