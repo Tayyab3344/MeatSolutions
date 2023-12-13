@@ -36,6 +36,7 @@ import home from "./pages/home";
 import error404 from "./pages/404";
 import signup from "./pages/sign-up";
 import login from "./pages/login";
+import forgetpassword from "./pages/ForgetPassword";
 import addRestaurant from "./pages/addRestaurant";
 import restaurant from "./pages/restaurant";
 import sellerDash from "./pages/sellerDashboard";
@@ -71,6 +72,7 @@ function App() {
             <Route exact path="/" component={home} />
             <AuthRoute exact path="/login" component={login} />
             <AuthRoute exact path="/register" component={signup} />
+            <AuthRoute exact path="/forgetpass" component={forgetpassword} />
             <AuthRoute exact path="/addrestaurant" component={addRestaurant} />
             <UserRoute exact path="/order/:restName" component={restaurant} />
             <SellerRoute
