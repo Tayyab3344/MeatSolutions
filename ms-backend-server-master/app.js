@@ -188,4 +188,31 @@ app.post("/api/form-submit", async (req, res) => {
   }
 });
 
+app.post("/api/forget-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if the email exists in the database
+    const user = await FormDataModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate a reset token (in a real-world scenario, you would typically send an email with this token)
+    const resetToken = generateResetToken();
+
+    // Update the user's document in the database with the reset token
+    await FormDataModel.updateOne({ email }, { $set: { resetToken } });
+
+    // In this example, we're sending the reset token in the API response (for demo purposes)
+    res
+      .status(200)
+      .json({ message: "Reset Password Link sent to your Email", resetToken });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 exports.clients = clients;
