@@ -5,7 +5,7 @@ const User = require("../models/user");
 const Account = require("../models/account");
 const authController = require("../controllers/authController");
 
-const router = express.Router();
+// /const router = express.Router();
 
 router.post(
   "/signup-user",

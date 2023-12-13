@@ -29,30 +29,30 @@ exports.getRestaurants = (req, res, next) => {
     });
 };
 
-// exports.getRestaurants = (req, res, next) => {
-//   const currentPage = req.query.page || 1;
-//   const perPage = 6;
-//   let totalItems;
-//   Seller.find()
-//     .countDocuments()
-//     .then((totalCount) => {
-//       totalItems = totalCount;
+exports.getRestaurants = (req, res, next) => {
+  const currentPage = req.query.page || 1;
+  const perPage = 6;
+  let totalItems;
+  Seller.find()
+    .countDocuments()
+    .then((totalCount) => {
+      totalItems = totalCount;
 
-//       return Seller.find().sort({ createdAt: -1 });
-//       // .skip((currentPage - 1) * perPage)
-//       // .limit(perPage);
-//     })
-//     .then((sellers) => {
-//       res.status(200).json({
-//         restaurants: sellers,
-//         totalItems: totalItems,
-//       });
-//     })
-//     .catch((err) => {
-//       if (!err.statusCode) err.statusCode = 500;
-//       next(err);
-//     });
-// };
+      return Seller.find().sort({ createdAt: -1 });
+      // .skip((currentPage - 1) * perPage)
+      // .limit(perPage);
+    })
+    .then((sellers) => {
+      res.status(200).json({
+        restaurants: sellers,
+        totalItems: totalItems,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) err.statusCode = 500;
+      next(err);
+    });
+};
 
 exports.postCart = (req, res, next) => {
   const itemId = req.body.itemId;

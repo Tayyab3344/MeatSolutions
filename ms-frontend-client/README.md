@@ -1,7 +1,7 @@
 # foodHub-frontend
 Front-end for food delivery application created using reactjs along with redux and Material-UI
 
-## Getting started
+
 To get the server running locally:
 
 * Clone this repo
