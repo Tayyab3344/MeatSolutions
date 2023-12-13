@@ -55,7 +55,7 @@ export default function Login() {
 
   let incorrectCredentialsError = null;
   let verifyEmailError = null;
-  if (typeof errors === 'string') {
+  if (typeof errors === "string") {
     if (errors.includes("Invalid email/password"))
       incorrectCredentialsError = errors;
     if (errors.includes("Verify your email")) verifyEmailError = errors;
@@ -66,7 +66,11 @@ export default function Login() {
       <Grid item sm />
       <Grid item sm style={{ marginBottom: 34 }}>
         <img
-          src="./Untitled-2.png" width="100px" alt="MSLogo" className={classes.hamBurger}/>
+          src="./Untitled-2.png"
+          width="100px"
+          alt="MSLogo"
+          className={classes.hamBurger}
+        />
         <Typography variant="h3" className={classes.title}>
           Meat Solution Login
         </Typography>
@@ -119,8 +123,7 @@ export default function Login() {
             variant="contained"
             color="primary"
             className={classes.button}
-            disabled={loading}
-          >
+            disabled={loading}>
             Login
             {loading && (
               <CircularProgress size={30} className={classes.progress} />
@@ -129,6 +132,11 @@ export default function Login() {
           <br />
           <small className={classes.small}>
             don't have an account ? sign up <Link to="/register">here</Link>
+          </small>
+          <br />
+          <small className={classes.small}>
+            forgot your account's password ?{" "}
+            <Link to="/forgetpass">reset password</Link>
           </small>
         </form>
       </Grid>
