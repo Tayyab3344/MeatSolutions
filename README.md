@@ -37,14 +37,14 @@ Ensure you have the following installed:
 
 ### Clone the Repository
 ```sh
-git clone https://github.com/your-username/io.foodapp.git
-cd io.foodapp
+git clone https://github.com/Tayyab3344/MeatSolutions.git
+cd MeatSolutions
 ```
 
 ### Backend Setup
 1. Install dependencies:
    ```sh
-   cd backend
+   cd ms-backend-server-master
    npm install
    ```
 2. Configure environment variables in `nodemon.json`:
@@ -66,7 +66,7 @@ cd io.foodapp
 ### Frontend Setup
 1. Install dependencies:
    ```sh
-   cd frontend
+   cd ms-frontend-client
    npm install
    ```
 2. Start the frontend development server:
@@ -96,6 +96,16 @@ cd io.foodapp
    ```
 5. Open a pull request.
 
-## License
-This project is licensed under the ISC License.
+## Screenshots
 
+![MERN Working 10](https://github.com/user-attachments/assets/9b0d5d09-e142-4616-8715-06f1bb82cbdd)
+![MERN Working 9](https://github.com/user-attachments/assets/35b82d0e-e613-41cc-b032-05fd29da0602)
+![MERN Working 8](https://github.com/user-attachments/assets/0d532541-d1ed-4383-a896-65410c2d891d)
+![MERN Working 7](https://github.com/user-attachments/assets/368ebde7-68c9-42e8-9f52-a545e4bf02d1)
+![MERN Working 6](https://github.com/user-attachments/assets/bf669da7-4df9-4432-9631-6de106411e11)
+![MERN Working 5](https://github.com/user-attachments/assets/e8fd6281-d546-46aa-ab4c-781eec14fae3)
+![MERN Working 4](https://github.com/user-attachments/assets/00126c93-d3e9-4e8f-aa3d-9da9fbc37476)
+![MERN Working 3](https://github.com/user-attachments/assets/f3c0467d-d277-49bb-ad5d-35a3ceb56a61)
+![MERN Working 2](https://github.com/user-attachments/assets/32e0fcc2-22ae-43b6-9cac-f1d33c2b72c4)
+![MERN Working 1](https://github.com/user-attachments/assets/9d15662c-db19-485c-8225-7244f954f5e5)
+![MERN Working 11](https://github.com/user-attachments/assets/6b325e0e-f7ba-4e78-aa76-23e1e97442e6)
